@@ -28,22 +28,22 @@ export default function ForgotPassword() {
 
     // Validare de bază
     if (!email) {
-      setError("Vă rugăm să introduceți adresa de email.");
+      setError("Please enter your email address.");
       return;
     }
 
     if (!password || !confirmPassword) {
-      setError("Vă rugăm să completați ambele câmpuri pentru parolă.");
+      setError("Please fill in both password fields.");
       return;
     }
 
     if (password !== confirmPassword) {
-      setError("Parolele nu se potrivesc.");
+      setError("Passwords do not match.");
       return;
     }
 
     if (password.length < 8) {
-      setError("Parola trebuie să aibă cel puțin 8 caractere.");
+      setError("Password must be at least 8 characters long.");
       return;
     }
 
@@ -57,9 +57,9 @@ export default function ForgotPassword() {
   return (
     <Card className="mx-auto w-full max-w-md">
       <CardHeader>
-        <CardTitle>Recuperare Parolă</CardTitle>
+        <CardTitle>Password recovery</CardTitle>
         <CardDescription>
-          Introduceți adresa de email și noua parolă pentru a reseta contul.
+          Enter your email address and new password to reset your account.
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -69,27 +69,27 @@ export default function ForgotPassword() {
             <Input
               id="email"
               type="email"
-              placeholder="exemplu@email.com"
+              placeholder="m@email.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="password">Noua Parolă</Label>
+            <Label htmlFor="password">New Password</Label>
             <Input
               id="password"
               type="password"
-              placeholder="Introduceți noua parolă"
+              placeholder="Enter the new password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="confirmPassword">Confirmă Noua Parolă</Label>
+            <Label htmlFor="confirmPassword">Confirm New Password</Label>
             <Input
               id="confirmPassword"
               type="password"
-              placeholder="Confirmați noua parolă"
+              placeholder="Confirm the new password"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
             />
@@ -102,21 +102,21 @@ export default function ForgotPassword() {
           {success && (
             <Alert>
               <AlertDescription>
-                Parola a fost resetată cu succes. Vă puteți autentifica acum cu
-                noua parolă.
+                Password reset successfully. You can now login with the new
+                password.
               </AlertDescription>
             </Alert>
           )}
           <Button type="submit" className="w-full">
-            Resetează Parola
+            Reset Password
           </Button>
         </form>
       </CardContent>
       <CardFooter className="flex justify-center">
         <p className="text-sm text-muted-foreground">
-          Vă amintiți parola?{" "}
+          Remember your password?{" "}
           <a href="../" className="text-primary hover:underline">
-            Autentificare
+            Back to Log in
           </a>
         </p>
       </CardFooter>

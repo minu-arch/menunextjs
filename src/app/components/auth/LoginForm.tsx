@@ -1,13 +1,12 @@
 import Image from "next/image";
 import Link from "next/link";
-
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
 const LoginForm = () => {
   return (
-    <div className="relative size-full lg:grid lg:min-h-[600px] lg:grid-cols-2 xl:min-h-[800px]">
+    <div className="relative mx-auto size-full lg:grid lg:min-h-[600px] lg:grid-cols-2 xl:min-h-[800px]">
       <div className="s:rounded-md relative z-10 flex items-center justify-center py-12 lg:rounded-none">
         <div className="absolute inset-0 z-0">
           <Image
