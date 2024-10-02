@@ -12,6 +12,7 @@
   },
   "rules": {
     "@typescript-eslint/no-unused-vars": "off",
+    "@typescript-eslint/no-empty-interface": "off",
     "tailwindcss/classnames-order": "off", // Activează regula care verifică clasele Tailwind CSS
     "tailwindcss/no-custom-classname": "off",
     "jsx-quotes": ["off"]
