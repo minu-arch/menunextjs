@@ -16,10 +16,25 @@ const ProductsMain = dynamic(() => import("../MainComp/ProductsMain"), {
 const DashMain = dynamic(() => import("../MainComp/DashMain"), {
   loading: () => <SkeletonLoader />,
 });
+const LogOut = dynamic(() => import("./myaccount/LogOut"), {
+  loading: () => <SkeletonLoader />,
+});
+const MyAccount = dynamic(() => import("./myaccount/MyAccount"), {
+  loading: () => <SkeletonLoader />,
+});
+const Settings = dynamic(() => import("./myaccount/Settings"), {
+  loading: () => <SkeletonLoader />,
+});
 
 const DashboardMain = ({ currentComponent }: { currentComponent: string }) => {
   const renderComponent = () => {
     switch (currentComponent.toLowerCase()) {
+      case "settings":
+        return <Settings />;
+      case "myaccount":
+        return <MyAccount />;
+      case "logout":
+        return <LogOut />;
       case "dashboard":
         return <DashMain />;
       case "orders":

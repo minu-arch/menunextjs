@@ -14,6 +14,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { ModeToggle } from "@/components/ModeToggle";
 import DashboardNav from "./components/DashboardNav";
+
 const DashboardHeader = ({
   setCurrentComponent,
 }: {
@@ -93,10 +94,16 @@ const DashboardHeader = ({
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>My Account</DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>Settings</DropdownMenuItem>
-            <DropdownMenuItem>Support</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => setCurrentComponent("myaccount")}>
+              Settings
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => setCurrentComponent("settings")}>
+              Support
+            </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>Logout</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => setCurrentComponent("logout")}>
+              Logout
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
