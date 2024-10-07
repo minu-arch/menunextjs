@@ -207,7 +207,7 @@ export default function MyAccount() {
                 </div>
               </form>
             </CardContent>
-            <CardFooter className="flex justify-between">
+            <CardFooter className="flex s:flex-col s:items-start s:gap-2 xs:flex-row xs:justify-between">
               <Button
                 variant="outline"
                 onClick={() => console.log("Password reset requested")}
