@@ -4,7 +4,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 
 export const metadata: Metadata = {
   title: {
-    default: "DashBoard Next.js",
+    default: "My DashBoard ",
     template: "%s | Menu",
   },
   description:

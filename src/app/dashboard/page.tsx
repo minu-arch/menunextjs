@@ -2,11 +2,6 @@
 import DashboardHeader from "@/app/components/dashboard/DashboardHeader";
 import DashboardMain from "@/app/components/dashboard/DashboardMain";
 import { useState } from "react";
-import { Metadata } from "next";
-
-export const metadata: Metadata = {
-  title: "Dashboard",
-};
 
 const DashboardHome = () => {
   const [currentComponent, setCurrentComponent] = useState("dashboard");
