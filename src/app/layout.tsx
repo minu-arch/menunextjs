@@ -4,9 +4,18 @@ import { ThemeProvider } from "@/components/theme-provider";
 
 export const metadata: Metadata = {
   title: {
-    absolute: "Create Next App",
-    default: "Login",
-    template: "%s | Create Next App",
+    default: "DashBoard Next.js",
+    template: "%s | Menu",
+  },
+  description:
+    "Professional web developer from Romania. Specialized in React and Next.js. Dedicated to creating high-quality web applications",
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    siteName: "minufy.site",
+  },
+  twitter: {
+    card: "summary_large_image",
   },
 };
 
