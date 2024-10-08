@@ -3,7 +3,20 @@ import { Metadata } from "next";
 import { ModeToggle } from "@/components/ModeToggle";
 
 export const metadata: Metadata = {
-  title: "Login",
+  openGraph: {
+    images: [
+      {
+        url: "https://menunextjs.vercel.app/api/og?v=${Date.now()}",
+        width: 1000,
+        height: 630,
+      },
+    ],
+  },
+  twitter: {
+    title: "Minu | Web Developer",
+    description: "Professional web developer specializing in React and Next.js",
+    images: ["https://menunextjs.vercel.app/api/og"],
+  },
 };
 
 export default function Home() {
