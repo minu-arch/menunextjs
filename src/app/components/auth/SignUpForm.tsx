@@ -22,7 +22,7 @@ export default function SignUpForm() {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
     setSuccess(false);
@@ -38,11 +38,32 @@ export default function SignUpForm() {
       return;
     }
 
-    // Here you would typically add your form submission logic
-    // For example, calling an API to register the user
+    try {
+      const res = await fetch("/api/signup", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ firstName, lastName, email, password }),
+      });
 
-    // Simulating a successful submission
-    setSuccess(true);
+      if (!res.ok) {
+        const contentType = res.headers.get("content-type");
+        if (contentType && contentType.includes("application/json")) {
+          const data = await res.json();
+          setError(data.error);
+        } else {
+          setError("An unexpected error occurred.");
+        }
+        return;
+      }
+
+      const data = await res.json();
+      setSuccess(true);
+    } catch (error) {
+      console.error("Error during sign up:", error);
+      setError("An error occurred during sign up. Please try again.");
+    }
   };
 
   return (

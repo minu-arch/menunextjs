@@ -10,12 +10,21 @@ export const metadata: Metadata = {
   description:
     "Professional web developer from Romania. Specialized in React and Next.js. Dedicated to creating high-quality web applications",
   openGraph: {
+    images: [
+      {
+        url: `https://menunextjs.vercel.app/api/og?v=${Date.now()}`,
+        width: 1000,
+        height: 630,
+      },
+    ],
     type: "website",
     locale: "en_US",
     siteName: "minufy.site",
   },
   twitter: {
-    card: "summary_large_image",
+    title: "Minu | Web Developer",
+    description: "Professional web developer specializing in React and Next.js",
+    images: ["https://menunextjs.vercel.app/api/og"],
   },
 };
 

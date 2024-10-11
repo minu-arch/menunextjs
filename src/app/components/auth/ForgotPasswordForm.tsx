@@ -21,7 +21,7 @@ export default function ForgotPassword() {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
     setSuccess(false);
@@ -47,11 +47,20 @@ export default function ForgotPassword() {
       return;
     }
 
-    // Aici ar trebui să adăugați logica pentru resetarea parolei
-    // De exemplu, apelarea unui API pentru a verifica emailul și a reseta parola
+    const res = await fetch("/api/auth/reset-password", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email, password }),
+    });
 
-    // Simulăm o resetare reușită a parolei
-    setSuccess(true);
+    if (res.ok) {
+      setSuccess(true);
+    } else {
+      const data = await res.json();
+      setError(data.error);
+    }
   };
 
   return (
