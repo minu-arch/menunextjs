@@ -32,6 +32,7 @@ export default async function handler(
       // Autentificare reușită
       res.status(200).json({ message: "Login successful", user });
     } catch (error) {
+      console.error("Error during login:", error); // Adaugă logare pentru debugging
       res.status(500).json({ error: "Internal Server Error" });
     }
   } else {
