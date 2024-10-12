@@ -1,8 +1,6 @@
+import { sql } from "@vercel/postgres";
 import { NextApiRequest, NextApiResponse } from "next";
-import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcryptjs";
-
-const prisma = new PrismaClient();
 
 export default async function handler(
   req: NextApiRequest,
@@ -16,27 +14,22 @@ export default async function handler(
       return res.status(400).json({ error: "Missing required fields" });
     }
 
-    // Verifică dacă e-mailul există deja
-    const existingUser = await prisma.user.findUnique({ where: { email } });
-    if (existingUser) {
-      return res.status(400).json({ error: "Email already exists" });
-    }
-
-    // Criptează parola
-    const hashedPassword = await bcrypt.hash(password, 10);
-
     try {
-      // Creează utilizatorul
-      const newUser = await prisma.user.create({
-        data: {
-          firstName,
-          lastName,
-          email,
-          password: hashedPassword,
-        },
-      });
+      // Verifică dacă e-mailul există deja
+      const existingUserQuery =
+        await sql`SELECT * FROM Users WHERE email = ${email};`;
+      const existingUser = existingUserQuery.rows[0];
+      if (existingUser) {
+        return res.status(400).json({ error: "Email already exists" });
+      }
 
-      res.status(201).json(newUser);
+      // Criptează parola
+      const hashedPassword = await bcrypt.hash(password, 10);
+
+      // Creează utilizatorul
+      await sql`INSERT INTO Users (firstName, lastName, email, password) VALUES (${firstName}, ${lastName}, ${email}, ${hashedPassword});`;
+
+      res.status(201).json({ message: "User created successfully" });
     } catch (error) {
       console.error("Error creating user:", error);
       res.status(500).json({ error: "Internal Server Error" });

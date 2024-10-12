@@ -1,8 +1,6 @@
+import { sql } from "@vercel/postgres";
 import { NextApiRequest, NextApiResponse } from "next";
-import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcryptjs";
-
-const prisma = new PrismaClient();
 
 export default async function handler(
   req: NextApiRequest,
@@ -21,7 +19,8 @@ export default async function handler(
 
     try {
       // Verifică dacă utilizatorul există
-      const user = await prisma.user.findUnique({ where: { email } });
+      const userQuery = await sql`SELECT * FROM Users WHERE email = ${email};`;
+      const user = userQuery.rows[0];
       if (!user) {
         return res.status(404).json({ error: "User not found" });
       }
@@ -30,13 +29,11 @@ export default async function handler(
       const hashedPassword = await bcrypt.hash(newPassword, 10);
 
       // Actualizează parola utilizatorului
-      await prisma.user.update({
-        where: { email },
-        data: { password: hashedPassword },
-      });
+      await sql`UPDATE Users SET password = ${hashedPassword} WHERE email = ${email};`;
 
       res.status(200).json({ message: "Password changed successfully" });
     } catch (error) {
+      console.error("Error during password reset:", error);
       res.status(500).json({ error: "Internal Server Error" });
     }
   } else {
