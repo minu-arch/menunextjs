@@ -6,7 +6,7 @@ export const metadata: Metadata = {
   openGraph: {
     images: [
       {
-        url: "https://menunextjs.vercel.app/api/og?v=${Date.now()}",
+        url: "https://minufy.site/api/og?v=${Date.now()}",
         width: 1000,
         height: 630,
       },
@@ -15,7 +15,7 @@ export const metadata: Metadata = {
   twitter: {
     title: "Minu | Web Developer",
     description: "Professional web developer specializing in React and Next.js",
-    images: ["https://menunextjs.vercel.app/api/og"],
+    images: ["https://minufy.site/api/og"],
   },
 };
 

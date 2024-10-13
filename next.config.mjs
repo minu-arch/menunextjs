@@ -9,7 +9,7 @@ const nextConfig = {
         has: [
           {
             type: "host",
-            value: "^(?!www\\.minufy\\.site$).*$",
+            value: "^(?!localhost).*$",
           },
         ],
         destination: "https://www.minufy.site/:path*",
