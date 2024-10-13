@@ -47,19 +47,24 @@ export default function ForgotPassword() {
       return;
     }
 
-    const res = await fetch("/api/forgot-password", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ email, password }),
-    });
+    try {
+      const res = await fetch("/api/forgot-password", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, newPassword: password, confirmPassword }),
+      });
 
-    if (res.ok) {
-      setSuccess(true);
-    } else {
-      const data = await res.json();
-      setError(data.error);
+      if (res.ok) {
+        setSuccess(true);
+      } else {
+        const data = await res.json();
+        setError(data.error || "An error occurred. Please try again.");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      setError("An error occurred. Please try again.");
     }
   };
 

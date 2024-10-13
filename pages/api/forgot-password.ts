@@ -1,7 +1,6 @@
 import { sql } from "@vercel/postgres";
 import { NextApiRequest, NextApiResponse } from "next";
 import bcrypt from "bcryptjs";
-import rateLimit from "express-rate-limit";
 import winston from "winston";
 
 // Configurare logger
@@ -14,23 +13,40 @@ const logger = winston.createLogger({
   transports: [new winston.transports.File({ filename: "password-reset.log" })],
 });
 
-// Configurare rate limiter
-const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minute
-  max: 5, // Limită de 5 cereri per fereastră per IP
-  message: {
-    error: "Too many password reset attempts, please try again later.",
-  },
-  standardHeaders: true,
-  legacyHeaders: false,
-});
+// Simple in-memory rate limiting
+const WINDOW_MS = 15 * 60 * 1000; // 15 minutes
+const MAX_REQUESTS = 5;
+const ipRequests: { [key: string]: { count: number; resetTime: number } } = {};
+
+function checkRateLimit(ip: string): boolean {
+  const now = Date.now();
+  if (!ipRequests[ip] || ipRequests[ip].resetTime < now) {
+    ipRequests[ip] = { count: 1, resetTime: now + WINDOW_MS };
+    return true;
+  }
+
+  if (ipRequests[ip].count < MAX_REQUESTS) {
+    ipRequests[ip].count++;
+    return true;
+  }
+
+  return false;
+}
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse,
 ) {
-  // Aplicare rate limiting
-  await new Promise((resolve) => limiter(req, res, resolve));
+  const ip = req.headers["x-forwarded-for"] || req.socket.remoteAddress;
+  if (typeof ip !== "string") {
+    return res.status(400).json({ error: "Invalid IP address" });
+  }
+
+  if (!checkRateLimit(ip)) {
+    return res
+      .status(429)
+      .json({ error: "Too many requests, please try again later." });
+  }
 
   if (req.method === "POST") {
     const { email, newPassword, confirmPassword } = req.body;
