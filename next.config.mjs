@@ -3,25 +3,20 @@ const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
   async redirects() {
-    const env = process.env.NEXT_PUBLIC_ENV || process.env.NODE_ENV;
-
-    // Nu facem redirect în mediul de dezvoltare
-    if (env === "development") {
+    if (process.env.NODE_ENV === "development") {
       return [];
     }
-
     return [
       {
-        source: "/(.*)",
+        source: "/:path*",
         has: [
           {
             type: "host",
-            key: "host",
-            value: "^(?!www\\.minufy\\.site).*$",
+            value: "(?!www\\.minufy\\.site).*",
           },
         ],
-        destination: "https://www.minufy.site/:path*",
         permanent: true,
+        destination: "https://www.minufy.site/:path*",
       },
     ];
   },
