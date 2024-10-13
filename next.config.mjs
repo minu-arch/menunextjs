@@ -6,7 +6,13 @@ const nextConfig = {
     return [
       {
         source: "/(.*)",
-        destination: "https://www.minufy.site/$1",
+        has: [
+          {
+            type: "host",
+            value: "^(?!www\\.minufy\\.site$).*$",
+          },
+        ],
+        destination: "https://www.minufy.site/:path*",
         permanent: true,
       },
     ];
