@@ -38,7 +38,7 @@ export default function RootLayout({
       <body className="size-full">
         <ThemeProvider
           attribute="class"
-          defaultTheme="system"
+          defaultTheme="light"
           enableSystem
           disableTransitionOnChange
         >
