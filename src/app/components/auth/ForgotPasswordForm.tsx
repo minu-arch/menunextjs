@@ -47,7 +47,7 @@ export default function ForgotPassword() {
       return;
     }
 
-    const res = await fetch("/api/auth/reset-password", {
+    const res = await fetch("/api/forgot-password", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

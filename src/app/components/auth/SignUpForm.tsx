@@ -1,8 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useRouter } from "next/navigation";
 import { Label } from "@/components/ui/label";
 import {
   Card,
@@ -21,7 +22,7 @@ export default function SignUpForm() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
-
+  const router = useRouter();
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
@@ -65,6 +66,15 @@ export default function SignUpForm() {
       setError("An error occurred during sign up. Please try again.");
     }
   };
+  useEffect(() => {
+    if (success) {
+      const timer = setTimeout(() => {
+        router.push("/"); // Redirecționează către pagina de logare
+      }, 5000);
+
+      return () => clearTimeout(timer); // Curăță timer-ul la demontare
+    }
+  }, [success, router]);
 
   return (
     <Card className="mx-auto w-full max-w-md">
@@ -124,8 +134,12 @@ export default function SignUpForm() {
           {success && (
             <Alert>
               <AlertDescription>
-                Information submitted successfully!
+                Information submitted successfully! You will be redirected to
+                the login page in 5 seconds.
               </AlertDescription>
+              {/* <Button onClick={() => router.push("/")} className="mt-2">
+                Back to Login
+              </Button> */}
             </Alert>
           )}
           <Button type="submit" className="w-full">
