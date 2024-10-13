@@ -16,22 +16,35 @@ const LoginForm = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError("");
 
-    const response = await fetch("/api/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ email, password }),
-    });
+    try {
+      const response = await fetch("/api/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      });
 
-    if (response.ok) {
-      const data = await response.json();
-      alert(data.message); // Afișează mesajul de succes
-      router.push("../../dashboard"); // Redirect sau alte acțiuni după autentificare reușită
-    } else {
-      const errorData = await response.json();
-      setError(errorData.error); // Setează mesajul de eroare
+      if (response.ok) {
+        const data = await response.json();
+
+        // Setăm token-ul în localStorage
+        localStorage.setItem("auth_token", data.token);
+
+        // Setăm token-ul și în cookie (pentru middleware)
+        document.cookie = `auth_token=${data.token}; path=/; max-age=3600;`;
+
+        // Redirect către dashboard
+        router.push("/dashboard");
+      } else {
+        const errorData = await response.json();
+        setError(errorData.error || "An error occurred during login");
+      }
+    } catch (error) {
+      console.error("Login error:", error);
+      setError("An unexpected error occurred. Please try again.");
     }
   };
 

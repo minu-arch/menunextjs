@@ -14,26 +14,36 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { LogOut } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 export default function Logout() {
   const [isLoggingOut, setIsLoggingOut] = useState(false);
+  const router = useRouter();
 
   const handleLogout = async () => {
     setIsLoggingOut(true);
-    // Here you would typically call your logout API
-    // For example:
-    // await fetch('/api/logout', { method: 'POST' })
 
-    // Simulating an API call with a timeout
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    try {
+      // Șterge token-ul din localStorage
+      const response = await fetch("/api/logout", {
+        method: "POST",
+        credentials: "include", // Asigură trimiterea cookie-urilor
+      });
 
-    // After successful logout, you might want to redirect the user
-    // or update the app state
-    console.log("User logged out");
-    setIsLoggingOut(false);
+      if (response.ok) {
+        // Șterge token-ul din localStorage
+        localStorage.removeItem("auth_token");
 
-    // Redirect to login page (you might want to use your routing library here)
-    window.location.href = "../../../auth/login";
+        console.log("User logged out");
+        router.push("/auth/login");
+      } else {
+        throw new Error("Logout failed");
+      }
+    } catch (error) {
+      console.error("Logout error:", error);
+    } finally {
+      setIsLoggingOut(false);
+    }
   };
 
   return (
