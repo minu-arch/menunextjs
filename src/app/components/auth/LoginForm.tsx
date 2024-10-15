@@ -30,8 +30,21 @@ const LoginForm = () => {
       if (response.ok) {
         const data = await response.json();
 
+        // Verifică dacă datele utilizatorului sunt corecte
+        console.log("User data received:", data.user); // Adaugă acest log
+
         // Setăm token-ul în localStorage
         localStorage.setItem("auth_token", data.token);
+
+        // Stocăm informațiile utilizatorului în localStorage
+        localStorage.setItem(
+          "user",
+          JSON.stringify({
+            firstName: data.user.firstName,
+            lastName: data.user.lastName,
+            email: data.user.email,
+          }),
+        );
 
         // Setăm token-ul și în cookie (pentru middleware)
         document.cookie = `auth_token=${data.token}; path=/; max-age=3600;`;

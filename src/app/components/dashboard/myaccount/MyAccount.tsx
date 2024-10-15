@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -24,13 +24,41 @@ import {
 } from "@/components/ui/select";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Bell, Lock, User } from "lucide-react";
+import { Skeleton } from "@/components/ui/skeleton";
+import { useRouter } from "next/navigation";
 
 export default function MyAccount() {
-  const [name, setName] = useState("John Doe");
-  const [email, setEmail] = useState("john.doe@example.com");
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("+1 (555) 123-4567");
   const [notifications, setNotifications] = useState(true);
   const [twoFactor, setTwoFactor] = useState(false);
+  const [loading, setLoading] = useState(true);
+
+  const [user, setUser] = useState<{
+    firstName: string;
+    lastName: string;
+    email: string;
+  } | null>(null);
+  const router = useRouter();
+
+  useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+
+    if (storedUser) {
+      const parsedUser = JSON.parse(storedUser);
+      console.log("Parsed user:", parsedUser);
+      setUser({
+        firstName: parsedUser.firstName,
+        lastName: parsedUser.lastName,
+        email: parsedUser.email,
+      });
+    } else {
+      // Dacă nu există utilizator în localStorage, redirecționează la login
+      router.push("/login");
+    }
+    setLoading(false);
+  }, [router]);
 
   const handleSavePersonalInfo = (e: React.FormEvent) => {
     e.preventDefault();
@@ -54,18 +82,32 @@ export default function MyAccount() {
     <div className="container mx-auto p-6">
       <h1 className="mb-6 text-3xl font-bold">Settings</h1>
       <div className="mb-6 flex items-center space-x-4">
-        <Avatar className="size-20">
-          <AvatarImage src="/placeholder.svg?height=80&width=80" alt={name} />
-          <AvatarFallback>
-            {name
-              .split(" ")
-              .map((n) => n[0])
-              .join("")}
-          </AvatarFallback>
-        </Avatar>
+        {loading ? (
+          <Skeleton className="size-20 rounded-full" />
+        ) : (
+          <Avatar className="size-20">
+            <AvatarImage src="/placeholder.svg?height=80&width=80" alt={name} />
+            <AvatarFallback>
+              {name
+                .split(" ")
+                .map((n) => n[0])
+                .join("")}
+            </AvatarFallback>
+          </Avatar>
+        )}
         <div>
-          <h2 className="text-2xl font-semibold">{name}</h2>
-          <p className="text-muted-foreground">{email}</p>
+          <h2 className="text-2xl font-semibold">
+            {loading ? (
+              <Skeleton className="h-6 w-48" />
+            ) : user ? (
+              `${user.firstName} ${user.lastName}`
+            ) : (
+              ""
+            )}
+          </h2>
+          <p className="mt-1 text-muted-foreground">
+            {loading ? <Skeleton className="h-4 w-64" /> : user?.email}
+          </p>
         </div>
       </div>
       <Tabs defaultValue="personal" className="space-y-4">
@@ -89,7 +131,7 @@ export default function MyAccount() {
                     <Label htmlFor="name">Full Name</Label>
                     <Input
                       id="name"
-                      value={name}
+                      value={user?.firstName || ""}
                       onChange={(e) => setName(e.target.value)}
                     />
                   </div>
@@ -98,7 +140,7 @@ export default function MyAccount() {
                     <Input
                       id="email"
                       type="email"
-                      value={email}
+                      value={user?.email || ""}
                       onChange={(e) => setEmail(e.target.value)}
                     />
                   </div>

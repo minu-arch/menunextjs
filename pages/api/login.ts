@@ -30,9 +30,23 @@ export default async function handler(
       }
 
       // Autentificare reușită
-      res.status(200).json({ message: "Login successful", user });
+      res.status(200).json({
+        message: "Login successful",
+        user: {
+          id: user.id,
+          firstName: user.firstname,
+          lastName: user.lastname,
+          email: user.email,
+        },
+      });
+      console.log("User data sent:", {
+        id: user.id,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+      }); // Adaugă acest logs
     } catch (error) {
-      console.error("Error during login:", error); // Adaugă logare pentru debugging
+      console.error("Error during login:", error);
       res.status(500).json({ error: "Internal Server Error" });
     }
   } else {

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import SkeletonLoader from "@/app/components/MainComp/SkeletonLoader";
 
 const AuthWrapper = ({ children }: { children: React.ReactNode }) => {
   const [isLoading, setIsLoading] = useState(true);
@@ -19,7 +20,11 @@ const AuthWrapper = ({ children }: { children: React.ReactNode }) => {
   }, [router]);
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="mx-auto flex h-dvh w-screen items-center justify-center">
+        <SkeletonLoader />
+      </div>
+    );
   }
 
   return <>{children}</>;
